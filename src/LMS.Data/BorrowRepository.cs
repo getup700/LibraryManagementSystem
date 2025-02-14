@@ -26,8 +26,18 @@ namespace LMS.Data
         {
             return _dbContext.BorrowRecords
                 .Include(x => x.Book)
-                .Include(x => x.Reader)
+                //.Include(x => x.Reader)
                 .ToList();
+        }
+
+        /// <summary>
+        /// 通过借阅记录Id查询
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public BorrowRecord GetById(Guid id)
+        {
+            return _dbContext.BorrowRecords.SingleOrDefault(x=>x.Id == id);
         }
 
         /// <summary>
@@ -35,12 +45,12 @@ namespace LMS.Data
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<BorrowRecord> GetByUserId(int userId)
+        public List<BorrowRecord> GetByUserId(Guid userId)
         {
             return _dbContext.BorrowRecords
                 .Where(x => x.ReaderId == userId)
                 .Include(x => x.Book)
-                .Include(x => x.Reader)
+                //.Include(x => x.Reader)
                 .ToList();
         }
 
@@ -58,7 +68,7 @@ namespace LMS.Data
         /// 归还书籍
         /// </summary>
         /// <param name="recordId"></param>
-        public void ReturnBook(int recordId)
+        public void ReturnBook(Guid recordId)
         {
             var borrowRecord = _dbContext.BorrowRecords
                 .FirstOrDefault(x => x.Id == recordId);

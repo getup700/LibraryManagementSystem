@@ -14,17 +14,17 @@ namespace LMS.Models
         /// <summary>
         /// 借阅记录Id
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// 图书编号
         /// </summary>
-        public long BookId { get; set; }
+        public Guid BookId { get; set; }
 
         /// <summary>
         /// 用户编号
         /// </summary>
-        public long? ReaderId { get; set; }
+        public Guid? ReaderId { get; set; }
 
         /// <summary>
         /// 借书日期
@@ -49,7 +49,6 @@ namespace LMS.Models
         /// <summary>
         /// 导航属性（efcore）
         /// </summary>
-        public Reader Reader { get; set; }
-
+        public User User { get; set; }
     }
 }

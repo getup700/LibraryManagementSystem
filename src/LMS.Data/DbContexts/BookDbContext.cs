@@ -11,16 +11,12 @@ namespace LMS.Models.DbContexts
     {
         public DbSet<Book> Books { get; set; }
 
-        public DbSet<Reader> Readers { get; set; }
-
-        public DbSet<User> Users { get; set; }
-
         public DbSet<BorrowRecord> BorrowRecords { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=.;Database=LibraryManagementDB;User Id=sa;Password=123456;TrustServerCertificate=true;");
+            var connStr = Environment.GetEnvironmentVariable("LibraryManagementDB", EnvironmentVariableTarget.User);
+            optionsBuilder.UseSqlServer(connStr);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

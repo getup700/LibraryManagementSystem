@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace LibraryManagementSystem
 {
-    public interface IReaderRepository:IRepository<Reader>
+    public interface IReaderRepository:IRepository<User>
     {
-        List<Reader> GetByName(string name);
+        List<User> GetByName(string name);
     }
 }

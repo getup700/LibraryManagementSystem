@@ -24,7 +24,7 @@ namespace LMS.Business
         }
 
         // 获取特定图书
-        public Book GetBookById(int id)
+        public Book GetBookById(Guid id)
         {
             return _bookRepository.GetById(id);
         }
@@ -50,7 +50,7 @@ namespace LMS.Business
         }
 
         // 更新图书
-        public string UpdateBook(int id, string title, string author, string isbn, int stock, string publisher, DateTime publishDate)
+        public string UpdateBook(Guid id, string title, string author, string isbn, int stock, string publisher, DateTime publishDate)
         {
             var book = _bookRepository.GetById(id);
             if (book == null)
@@ -68,7 +68,7 @@ namespace LMS.Business
         }
 
         // 删除图书
-        public string DeleteBook(int id)
+        public string DeleteBook(Guid id)
         {
             var book = _bookRepository.GetById(id);
             if (book == null)

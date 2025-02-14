@@ -6,41 +6,43 @@ using System.Threading.Tasks;
 
 namespace LMS.Models
 {
-    public class Book
+    /// <summary>
+    /// 角色
+    /// </summary>
+    public class Role
     {
         /// <summary>
-        /// 编号
+        /// 角色Id
         /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
-        /// ISBN编号
+        /// 角色名称。如管理员，用户
         /// </summary>
-        public string ISBN { get; set; }
-
-        /// <summary>
-        /// 名称
-        /// </summary>-
         public string Name { get; set; }
 
         /// <summary>
-        /// 作者
+        /// 角色描述
         /// </summary>
-        public string Author { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
-        /// 出版社
+        /// 是否激活
         /// </summary>
-        public string Publisher { get; set; }
+        public bool IsActive { get; set; }
 
         /// <summary>
-        /// 单价
+        /// 创建时间
         /// </summary>
-        public decimal Price { get; set; }
+        public DateTime CreateDate { get; set; }
 
         /// <summary>
-        /// 库存数量
+        /// 更新时间
         /// </summary>
-        public int Stock {  get; set; }
+        public DateTime UpdateDate { get; set; }
+
+        public ICollection<User> Users { get; set; }
+
+
     }
 }

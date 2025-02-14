@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sln", "sln", "{1F7D6C83-D80
 		src\Directory.Build.props = src\Directory.Build.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReverseEngineer", "tests\ReverseEngineer\ReverseEngineer.csproj", "{460B7056-8760-4F5C-AE08-598FF29EC7E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{0ADFE3F3-FBCD-431F-B21D-89B17A98106C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ADFE3F3-FBCD-431F-B21D-89B17A98106C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ADFE3F3-FBCD-431F-B21D-89B17A98106C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{460B7056-8760-4F5C-AE08-598FF29EC7E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{460B7056-8760-4F5C-AE08-598FF29EC7E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{460B7056-8760-4F5C-AE08-598FF29EC7E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{460B7056-8760-4F5C-AE08-598FF29EC7E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +64,6 @@ Global
 		{42147843-5FA6-4EBE-B4D5-6B82AFFB3014} = {86853D89-43C0-4F84-B60A-40BF2F9BD438}
 		{4507C37F-D90A-49E5-8F5D-5405F50B78D9} = {86853D89-43C0-4F84-B60A-40BF2F9BD438}
 		{0ADFE3F3-FBCD-431F-B21D-89B17A98106C} = {86853D89-43C0-4F84-B60A-40BF2F9BD438}
+		{460B7056-8760-4F5C-AE08-598FF29EC7E2} = {D4D5AC5E-7689-48D9-A8E0-5E5B919F6A15}
 	EndGlobalSection
 EndGlobal

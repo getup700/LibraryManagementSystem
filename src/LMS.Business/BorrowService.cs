@@ -26,7 +26,7 @@ namespace LMS.Business
         /// <param name="bookId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public string BorrowBook(int bookId,int userId)
+        public string BorrowBook(Guid bookId, Guid userId)
         {
             var book = _bookRepository.GetById(bookId);
             if (book == null)
@@ -50,9 +50,9 @@ namespace LMS.Business
             return "借阅成功";
         }
 
-        public string ReturnBook(int recordId)
+        public string ReturnBook(Guid recordId)
         {
-            var record = _borrowRepository.GetByUserId(recordId);
+            var record = _borrowRepository.GetById(recordId);
             if (record == null)
             {
                 return "借阅记录不存在";

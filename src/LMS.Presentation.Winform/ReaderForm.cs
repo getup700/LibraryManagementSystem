@@ -12,7 +12,7 @@ namespace LMS.Presentation.Winform
         private void ReaderForm_Load(object sender, EventArgs e)
         {
             var bll = new ReaderService();
-            dataGridView1.DataSource = bll.GetReaders();
+            //dataGridView1.DataSource = bll.GetReaders();
         }
 
         private void button1_Click(object sender, EventArgs e)

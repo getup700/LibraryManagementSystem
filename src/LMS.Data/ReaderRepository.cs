@@ -10,9 +10,9 @@ namespace LibraryManagementSystem
 {
     public class ReaderRepository : IReaderRepository
     {
-        private readonly BookDbContext _dbContext;
+        private readonly UserIdentityContext _dbContext;
 
-        public ReaderRepository(BookDbContext bookDbContext)
+        public ReaderRepository(UserIdentityContext bookDbContext)
         {
             _dbContext = bookDbContext;
         }
@@ -27,25 +27,25 @@ namespace LibraryManagementSystem
             return dt;
         }
 
-        public List<Reader> GetAll()
+        public List<User> GetAll()
         {
-            return _dbContext.Readers.ToList();
+            return _dbContext.Users.ToList();
         }
 
-        public Reader GetById(long id)
+        public User GetById(Guid id)
         {
-            return _dbContext.Readers
+            return _dbContext.Users
                 .SingleOrDefault(x => x.Id == id);
         }
 
-        public List<Reader> GetByName(string name)
+        public List<User> GetByName(string name)
         {
-            return _dbContext.Readers
+            return _dbContext.Users
                 .Where(x => x.Name.Contains(name))
                 .ToList();
         }
 
-        public void Add(Reader reader)
+        public void Add(User reader)
         {
             if (IsExist(reader.Id))
             {
@@ -55,17 +55,17 @@ namespace LibraryManagementSystem
             _dbContext.SaveChanges();
         }
 
-        public void Delete(long id)
+        public void Delete(Guid id)
         {
             if (IsExist(id))
             {
                 var reader = GetById(id);
-                _dbContext.Readers.Remove(reader);
+                _dbContext.Users.Remove(reader);
                 _dbContext.SaveChanges();
             }
         }
 
-        public void Update(Reader reader)
+        public void Update(User reader)
         {
             if (!IsExist(reader.Id))
             {
@@ -76,9 +76,9 @@ namespace LibraryManagementSystem
             _dbContext.SaveChanges();
         }
 
-        private bool IsExist(long id)
+        private bool IsExist(Guid id)
         {
-            var reader = _dbContext.Readers.SingleOrDefault(x => x.Id == id); ;
+            var reader = _dbContext.Users.SingleOrDefault(x => x.Id == id); ;
             return reader == null;
         }
     }

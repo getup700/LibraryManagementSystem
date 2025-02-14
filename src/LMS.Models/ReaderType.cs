@@ -14,10 +14,10 @@ namespace LMS.Models
         /// <summary>
         /// 编号
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// 读者类别
+        /// 读者类型名称
         /// </summary>
         public string Name { get; set; }
 

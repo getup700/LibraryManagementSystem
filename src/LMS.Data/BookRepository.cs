@@ -22,7 +22,7 @@ namespace LMS.Data
             return _dbContext.Books.ToList();
         }
 
-        public Book GetById(long id)
+        public Book GetById(Guid id)
         {
             return _dbContext.Books.SingleOrDefault(x => x.Id == id);
         }
@@ -44,7 +44,7 @@ namespace LMS.Data
             _dbContext.SaveChanges();
         }
 
-        public void Delete(long id)
+        public void Delete(Guid id)
         {
             if (!IsExist(id))
             {
@@ -66,7 +66,7 @@ namespace LMS.Data
         }
 
 
-        private bool IsExist(long id)
+        private bool IsExist(Guid id)
         {
             return _dbContext.Books.Any(x => x.Id == id);
         }

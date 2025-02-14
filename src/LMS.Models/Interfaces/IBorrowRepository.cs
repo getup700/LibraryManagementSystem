@@ -1,4 +1,5 @@
 ﻿using LMS.Models;
+using System;
 using System.Collections.Generic;
 
 namespace LMS.Data
@@ -16,18 +17,19 @@ namespace LMS.Data
         /// </summary>
         /// <returns></returns>
         List<BorrowRecord> GetAll();
+        BorrowRecord GetById(Guid id);
 
         /// <summary>
         /// 查询指定用户的借阅记录
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        List<BorrowRecord> GetByUserId(int userId);
+        List<BorrowRecord> GetByUserId(Guid userId);
 
         /// <summary>
         /// 还书
         /// </summary>
         /// <param name="recordId"></param>
-        void ReturnBook(int recordId);
+        void ReturnBook(Guid recordId);
     }
 }

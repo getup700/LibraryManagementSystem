@@ -22,7 +22,7 @@ namespace LMS.Data
         /// 删除一个<see cref="T"/>
         /// </summary>
         /// <param name="id"></param>
-        void Delete(long id);
+        void Delete(Guid id);
 
         /// <summary>
         /// 获取所有的<see cref="T"/>
@@ -35,7 +35,7 @@ namespace LMS.Data
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        T GetById(long id);
+        T GetById(Guid id);
 
         /// <summary>
         /// 更新<see cref="T"/>
