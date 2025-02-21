@@ -1,16 +1,18 @@
 ﻿using LMS.Dal.Entities;
+using LMS.Dal.Utils;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace LMS.Dal;
 
-public class UserDao
+public class UserDao : IEntityDao<User>
 {
     private SqlConnection conn => GetSqlConnection();
+    private readonly RoleDao _roleDao;
 
-    public UserDao(SqlConnection conn)
+    public UserDao(RoleDao roleDao)
     {
-        //this.conn = conn;
+        _roleDao = roleDao;
     }
 
     public UserDao()
@@ -58,6 +60,8 @@ public class UserDao
         while (reader.Read())
         {
             var user = InitialUser(reader);
+
+            
             users.Add(user);
         }
         conn.Close();
@@ -84,18 +88,20 @@ public class UserDao
         return null;
     }
 
-    public IEnumerable<User> GetAll()
+    public List<User> GetAll()
     {
         //using var conn = GetSqlConnection();
         var cmdTxt = "SELECT * FROM T_Users WHERE State = 1";
         using var command = new SqlCommand(cmdTxt, conn);
         var reader = command.ExecuteReader();
+        var result = new List<User>();
         while (reader.Read())
         {
             var user = InitialUser(reader);
-            yield return user;
+            result.Add(user);
         }
         conn.Close();
+        return result;
     }
 
     public async Task<List<User>> GetAllAsync()

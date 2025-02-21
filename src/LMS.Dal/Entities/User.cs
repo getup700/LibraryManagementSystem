@@ -47,5 +47,7 @@ namespace LMS.Dal.Entities
 
         public DateTime? BirthDay { get; set; }
 
+        public Role Role { get; set; }
+
     }
 }
