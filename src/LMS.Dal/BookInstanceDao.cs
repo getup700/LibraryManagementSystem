@@ -1,4 +1,5 @@
 ﻿using LMS.Dal.Entities;
+using LMS.Dal.Extensions;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -20,14 +21,15 @@ namespace LMS.Dal
         public int Create(BookInstance entity)
         {
             var cmdTxt =
-                @"CREATE INTO T_BookInstances (Id,CategoryId,Status)
+                @"INSERT INTO T_BookInstances (Id,CategoryId,Status)
                 VALUES (@Id,@CategoryId,@Status)";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Id", entity.Id);
             command.Parameters.AddWithValue("@CategoryId", entity.CategoryId);
             command.Parameters.AddWithValue("@Status", entity.Status);
-            conn.Open();
+            conn.OpenIfClosed();
             var result = command.ExecuteNonQuery();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -36,9 +38,9 @@ namespace LMS.Dal
             var cmdTxt = @"DELETE FROM T_BookInstances WHERE Id = @Id";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Id", id);
-            conn.Open();
+            conn.OpenIfClosed();
             var result = command.ExecuteNonQuery();
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -46,7 +48,7 @@ namespace LMS.Dal
         {
             var cmdTxt = @"SELECT * FROM T_BookInstances";
             using var command = new SqlCommand(cmdTxt, conn);
-            conn.Open();
+            conn.OpenIfClosed();
             var reader = command.ExecuteReader();
             var result = new List<BookInstance>();
             while (reader.Read())
@@ -54,7 +56,7 @@ namespace LMS.Dal
                 var item = InitialEntity(reader);
                 result.Add(item);
             }
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -63,16 +65,16 @@ namespace LMS.Dal
             var cmdTxt = @"SELECT * FROM T_BookInstances WHERE Id = @Id";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Id", id);
-            conn.Open();
+            conn.OpenIfClosed();
             var reader = command.ExecuteReader();
             while (reader.Read())
             {
                 var item = InitialEntity(reader);
-                conn.Close();
+                conn.CloseIfOpen();
                 return item;
             }
-            conn.Close();
-            return null;
+            conn.CloseIfOpen();
+            throw new Exception();
         }
 
         public List<BookInstance> GetByName(string name)
@@ -80,7 +82,7 @@ namespace LMS.Dal
             var cmdTxt = @"SELECT * FROM T_BookInstances WHERE Name = @Name";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Name", name);
-            conn.Open();
+            conn.OpenIfClosed();
             var reader = command.ExecuteReader();
             var result = new List<BookInstance>();
             while (reader.Read())
@@ -88,17 +90,20 @@ namespace LMS.Dal
                 var item = InitialEntity(reader);
                 result.Add(item);
             }
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
         public int Update(BookInstance entity)
         {
             var cmdTxt =
-                @"UPDATE T_BookInstances SET Status = @Status";
+                @"UPDATE T_BookInstances 
+                SET Status = @Status
+                WHERE Id = @Id";
             using var command = new SqlCommand( cmdTxt, conn);
+            command.Parameters.AddWithValue("@Id",entity.Id);
             command.Parameters.AddWithValue("@Status",entity.Status);
-            conn.Open();
+            conn.OpenIfClosed();
             var result = command.ExecuteNonQuery();
             return result;
         }

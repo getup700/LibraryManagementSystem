@@ -1,4 +1,5 @@
 ﻿using LMS.Dal.Entities;
+using LMS.Dal.Extensions;
 using LMS.Dal.Utils;
 using Microsoft.Data.SqlClient;
 using System.Data;
@@ -39,9 +40,10 @@ public class UserDao : IEntityDao<User>
 
         if (conn.State == ConnectionState.Closed)
         {
-            conn.Open();
+            conn.OpenIfClosed();
         }
         var result = command.ExecuteNonQuery();
+        conn.CloseIfOpen();
         return result;
     }
 
@@ -59,12 +61,12 @@ public class UserDao : IEntityDao<User>
         var users = new List<User>();
         while (reader.Read())
         {
-            var user = InitialUser(reader);
+            var user = InitialEnitty(reader);
 
             
             users.Add(user);
         }
-        conn.Close();
+        conn.CloseIfOpen();
         return users;
     }
 
@@ -79,13 +81,12 @@ public class UserDao : IEntityDao<User>
 
         var reader = command.ExecuteReader();
 
-        while (reader.Read())
+        if (!reader.Read())
         {
-            var user = InitialUser(reader);
-            return user;
+            throw new Exception("未读取到数据");
         }
-        conn.Close();
-        return null;
+        var user = InitialEnitty(reader);
+        return user;
     }
 
     public List<User> GetAll()
@@ -97,10 +98,10 @@ public class UserDao : IEntityDao<User>
         var result = new List<User>();
         while (reader.Read())
         {
-            var user = InitialUser(reader);
+            var user = InitialEnitty(reader);
             result.Add(user);
         }
-        conn.Close();
+        conn.CloseIfOpen();
         return result;
     }
 
@@ -113,10 +114,10 @@ public class UserDao : IEntityDao<User>
         var users = new List<User>();
         while (reader.Read())
         {
-            var user = InitialUser(reader);
+            var user = InitialEnitty(reader);
             users.Add(user);
         }
-        conn.Close();
+        conn.CloseIfOpen();
         return users;
     }
 
@@ -139,7 +140,7 @@ public class UserDao : IEntityDao<User>
             totalCount = Convert.ToInt32(result);
         }
 
-        conn.Close();
+        conn.CloseIfOpen();
         //获取总页数
         var pageCount = (int)Math.Ceiling(totalCount / (double)pageSize);
         return pageCount;
@@ -179,12 +180,12 @@ public class UserDao : IEntityDao<User>
         var users = new List<User>();
         while (await reader.ReadAsync())
         {
-            var user = InitialUser(reader);
+            var user = InitialEnitty(reader);
 
             users.Add(user);
         }
 
-        conn.Close();
+        conn.CloseIfOpen();
         return users;
     }
 
@@ -198,7 +199,7 @@ public class UserDao : IEntityDao<User>
         command.Parameters.AddWithValue("@Id", userId);
 
         var result = command.ExecuteNonQuery();
-        conn.Close();
+        conn.CloseIfOpen();
         return result;
     }
 
@@ -219,11 +220,11 @@ public class UserDao : IEntityDao<User>
         command.Parameters.AddWithValue("@Birthday", user.BirthDay == null ? DBNull.Value : user.BirthDay);
         command.Parameters.AddWithValue("@RegistrationTime", user.RegistrationTime);
         var result = command.ExecuteNonQuery();
-        conn.Close();
+        conn.CloseIfOpen();
         return result;
     }
 
-    private User InitialUser(SqlDataReader reader)
+    private User InitialEnitty(SqlDataReader reader)
     {
         var id = reader.GetGuid(reader.GetOrdinal("Id"));
         var user = new User(id);
@@ -244,7 +245,7 @@ public class UserDao : IEntityDao<User>
             conn = new SqlConnection(connStr);
             if (conn.State == ConnectionState.Closed)
             {
-                conn.Open();
+                conn.OpenIfClosed();
             }
         }
         catch (Exception e)

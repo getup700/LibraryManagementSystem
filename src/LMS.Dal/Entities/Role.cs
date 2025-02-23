@@ -8,10 +8,12 @@ namespace LMS.Dal.Entities
 {
     public class Role
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = default!;
 
-        public string Name { get; set; }
+        public  string Name { get; set; } = default!;
 
-        public List<Permission> Permissions { get; set; }
+        public string? Description { get; set; }
+
+        public ICollection<Permission> Permissions { get; set; } = [];
     }
 }

@@ -40,6 +40,7 @@
             accordionControlElement1 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement6 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             accordionControlElement7 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
+            accordionControlElement8 = new DevExpress.XtraBars.Navigation.AccordionControlElement();
             fluentDesignFormControl1 = new DevExpress.XtraBars.FluentDesignSystem.FluentDesignFormControl();
             barEditItem1 = new DevExpress.XtraBars.BarEditItem();
             repositoryItemImageEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
@@ -61,7 +62,7 @@
             // accordionControl1
             // 
             accordionControl1.Dock = DockStyle.Left;
-            accordionControl1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement2, accordionControlElement3, accordionControlElement4, accordionControlElement5, accordionControlElementUserInfo, accordionControlElementSettings, accordionControlElement1, accordionControlElement7 });
+            accordionControl1.Elements.AddRange(new DevExpress.XtraBars.Navigation.AccordionControlElement[] { accordionControlElement2, accordionControlElement3, accordionControlElement4, accordionControlElement5, accordionControlElementUserInfo, accordionControlElementSettings, accordionControlElement1, accordionControlElement7, accordionControlElement8 });
             accordionControl1.Location = new Point(0, 31);
             accordionControl1.Name = "accordionControl1";
             accordionControl1.ScrollBarMode = DevExpress.XtraBars.Navigation.ScrollBarMode.Fluent;
@@ -116,14 +117,21 @@
             // 
             // accordionControlElement6
             // 
+            accordionControlElement6.HeaderTemplate.AddRange(new DevExpress.XtraBars.Navigation.HeaderElementInfo[] { new DevExpress.XtraBars.Navigation.HeaderElementInfo(DevExpress.XtraBars.Navigation.HeaderElementType.Image), new DevExpress.XtraBars.Navigation.HeaderElementInfo(DevExpress.XtraBars.Navigation.HeaderElementType.HeaderControl), new DevExpress.XtraBars.Navigation.HeaderElementInfo(DevExpress.XtraBars.Navigation.HeaderElementType.ContextButtons), new DevExpress.XtraBars.Navigation.HeaderElementInfo(DevExpress.XtraBars.Navigation.HeaderElementType.Text, DevExpress.XtraBars.Navigation.HeaderElementAlignment.Right) });
             accordionControlElement6.Name = "accordionControlElement6";
             accordionControlElement6.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
-            accordionControlElement6.Text = "Element6";
+            accordionControlElement6.Text = "权限管理";
             // 
             // accordionControlElement7
             // 
             accordionControlElement7.Name = "accordionControlElement7";
             accordionControlElement7.Text = "Element7";
+            // 
+            // accordionControlElement8
+            // 
+            accordionControlElement8.Name = "accordionControlElement8";
+            accordionControlElement8.Style = DevExpress.XtraBars.Navigation.ElementStyle.Item;
+            accordionControlElement8.Text = "角色管理";
             // 
             // fluentDesignFormControl1
             // 
@@ -195,6 +203,7 @@
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement1;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement6;
         private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement7;
+        private DevExpress.XtraBars.Navigation.AccordionControlElement accordionControlElement8;
     }
 }
 

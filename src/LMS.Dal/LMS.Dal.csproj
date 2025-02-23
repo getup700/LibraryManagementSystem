@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.6" />
+    <PackageReference Include="Zack.Commons" Version="1.1.11" />
   </ItemGroup>
 
 </Project>

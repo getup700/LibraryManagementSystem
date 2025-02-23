@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using LMS.Dal.Extensions;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,14 +20,15 @@ namespace LMS.Dal.Entities
         public int Create(Permission entity)
         {
             var cmdTxt =
-                @"INSERT INTO T_Permissions (Id,Name)
-                VALUES(Id=@Id,Name=@Name)";
+                @"INSERT INTO T_Permissions (Id,Name,Description)
+                VALUES(@Id,@Name,@Description)";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Id", entity.Id);
             command.Parameters.AddWithValue("@Name", entity.Name);
-            conn.Open();
+            command.Parameters.AddWithValue("@Description", entity.Description);
+            conn.OpenIfClosed();
             var result = command.ExecuteNonQuery();
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -35,9 +37,9 @@ namespace LMS.Dal.Entities
             var cmdTxt = @"DELETE FROM T_Permissions WHERE Id = @Id";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Id", id);
-            conn.Open();
+            conn.OpenIfClosed();
             var result = command.ExecuteNonQuery();
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -45,7 +47,7 @@ namespace LMS.Dal.Entities
         {
             var cmdTxt = @"SELECT * FROM T_Permissions";
             using var command = new SqlCommand(cmdTxt, conn);
-            conn.Open();
+            conn.OpenIfClosed();
             var reader = command.ExecuteReader();
             var result = new List<Permission>();
             while (reader.Read())
@@ -53,7 +55,7 @@ namespace LMS.Dal.Entities
                 var item = InitialEnity(reader);
                 result.Add(item);
             }
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -62,16 +64,15 @@ namespace LMS.Dal.Entities
             var cmdTxt = @"SELECT * FROM T_Permissions WHERE Id = @Id";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Id", id);
-            conn.Open();
+            conn.OpenIfClosed();
             var reader = command.ExecuteReader();
-            while (reader.Read())
+            if (!reader.Read())
             {
-                var item = InitialEnity(reader);
-                conn.Close();
-                return item;
+                throw new Exception("未读取到数据");
             }
-            conn.Close();
-            return null;
+            var item = InitialEnity(reader);
+            conn.CloseIfOpen();
+            return item;
         }
 
         public List<Permission> GetByName(string name)
@@ -79,7 +80,7 @@ namespace LMS.Dal.Entities
             var cmdTxt = @"SELECT * FROM T_Permissions WHERE Name = @Name";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Name", name);
-            conn.Open();
+            conn.OpenIfClosed();
             var reader = command.ExecuteReader();
             var result = new List<Permission>();
             while (reader.Read())
@@ -87,20 +88,23 @@ namespace LMS.Dal.Entities
                 var item = InitialEnity(reader);
                 result.Add(item);
             }
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
         public int Update(Permission entity)
         {
             var cmdTxt =
-                @"UPDATE INTO T_Permissions (Name)
-                VALUES(@Name)";
+                @"UPDATE T_Permissions
+                SET Name = @Name,Description = @Description
+                WHERE Id = @Id";
             using var command = new SqlCommand(cmdTxt, conn);
+            command.Parameters.AddWithValue("@Id", entity.Id);
             command.Parameters.AddWithValue("@Name", entity.Name);
-            conn.Open();
+            command.Parameters.AddWithValue("@Description", entity.Description);
+            conn.OpenIfClosed();
             var result = command.ExecuteNonQuery();
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -109,6 +113,7 @@ namespace LMS.Dal.Entities
             var item = new Permission();
             item.Id = reader.GetGuid(reader.GetOrdinal("Id"));
             item.Name = reader.GetString(reader.GetOrdinal("Name"));
+            item.Description = reader.GetString(reader.GetOrdinal("Description"));
             return item;
 
 

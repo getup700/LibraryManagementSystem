@@ -34,7 +34,10 @@ namespace LMS.UI.Winforms.Components.Dialogs
             {
                 return val;
             }
-            return default;
+            else
+            {
+                throw new Exception();
+            }
         }
     }
 }

@@ -34,6 +34,12 @@ namespace LMS.UI.Winforms
                 case "设置":
                     userControl = App.ServiceProvider.GetRequiredService<SettingsPage>();
                     break;
+                case "角色管理":
+                    userControl = App.ServiceProvider.GetRequiredService<RoleManagerPage>();
+                    break;
+                case "权限管理":
+                    userControl = App.ServiceProvider.GetRequiredService<PermissionPage>();
+                    break;
                 default:
                     break;
             }

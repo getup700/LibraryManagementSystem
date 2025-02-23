@@ -1,4 +1,6 @@
 ﻿using LMS.Dal.Entities;
+using LMS.Dal.Extensions;
+using LMS.Dal.Utils;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,11 @@ namespace LMS.Dal
     {
         SqlConnection conn;
 
+        public RoleDao()
+        {
+            conn = ConnUtil.GetBookConnection();
+        }
+
         public RoleDao(SqlConnection conn)
         {
             this.conn = conn;
@@ -20,14 +27,15 @@ namespace LMS.Dal
         public int Create(Role entity)
         {
             var cmdTxt =
-                @"INSERT INTO T_Roles (Id,Name)
-                VALUES(Id=@Id,Name=@Name)";
+                @"INSERT INTO T_Roles (Id,Name,Description)
+                VALUES(@Id,@Name,@Description)";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Id", entity.Id);
             command.Parameters.AddWithValue("@Name", entity.Name);
-            conn.Open();
+            command.Parameters.AddWithValue("@Description", entity.Description);
+            conn.OpenIfClosed();
             var result = command.ExecuteNonQuery();
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -36,9 +44,9 @@ namespace LMS.Dal
             var cmdTxt = @"DELETE FROM T_Roles WHERE Id = @Id";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Id", id);
-            conn.Open();
+            conn.OpenIfClosed();
             var result = command.ExecuteNonQuery();
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -46,15 +54,16 @@ namespace LMS.Dal
         {
             var cmdTxt = @"SELECT * FROM T_Roles";
             using var command = new SqlCommand(cmdTxt, conn);
-            conn.Open();
+            conn.OpenIfClosed();
             var reader = command.ExecuteReader();
             var result = new List<Role>();
             while (reader.Read())
             {
                 var item = InitialEnity(reader);
+
                 result.Add(item);
             }
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -63,16 +72,15 @@ namespace LMS.Dal
             var cmdTxt = @"SELECT * FROM T_Roles WHERE Id = @Id";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Id", id);
-            conn.Open();
+            conn.OpenIfClosed();
             var reader = command.ExecuteReader();
-            while (reader.Read())
+            if (!reader.Read())
             {
-                var item = InitialEnity(reader);
-                conn.Close();
-                return item;
+                throw new Exception("未读取到数据");
             }
-            conn.Close();
-            return null;
+            var item = InitialEnity(reader);
+            conn.CloseIfOpen();
+            return item;
         }
 
         public List<Role> GetByName(string name)
@@ -80,7 +88,7 @@ namespace LMS.Dal
             var cmdTxt = @"SELECT * FROM T_Roles WHERE Name = @Name";
             using var command = new SqlCommand(cmdTxt, conn);
             command.Parameters.AddWithValue("@Name", name);
-            conn.Open();
+            conn.OpenIfClosed();
             var reader = command.ExecuteReader();
             var result = new List<Role>();
             while (reader.Read())
@@ -88,20 +96,23 @@ namespace LMS.Dal
                 var item = InitialEnity(reader);
                 result.Add(item);
             }
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
         public int Update(Role entity)
         {
             var cmdTxt =
-                @"UPDATE INTO T_Roles (Name)
-                VALUES(@Name)";
+                @"UPDATE T_Roles (Name,Description)
+                VALUES(@Name,@Description)
+                WHERE Id = @Id";
             using var command = new SqlCommand(cmdTxt, conn);
+            command.Parameters.AddWithValue("@Id", entity.Id);
             command.Parameters.AddWithValue("@Name", entity.Name);
-            conn.Open();
+            command.Parameters.AddWithValue("@Description", entity.Description);
+            conn.OpenIfClosed();
             var result = command.ExecuteNonQuery();
-            conn.Close();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -110,6 +121,7 @@ namespace LMS.Dal
             var item = new Role();
             item.Id = reader.GetGuid(reader.GetOrdinal("Id"));
             item.Name = reader.GetString(reader.GetOrdinal("Name"));
+            item.Description = reader.GetString(reader.GetOrdinal("Description"));
             return item;
         }
 

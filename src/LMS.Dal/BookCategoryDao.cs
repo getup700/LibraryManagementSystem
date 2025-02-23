@@ -1,4 +1,5 @@
 ﻿using LMS.Dal.Entities;
+using LMS.Dal.Extensions;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace LMS.Dal
                 SET Name = @Name,
                 WHERE Id = @Id";
             var command = new SqlCommand(cmdTxt, conn);
-            conn.Open();
+            conn.OpenIfClosed();
             command.Parameters.AddWithValue("@Id", bookCategory.Id);
             command.Parameters.AddWithValue("@ISBN", bookCategory.ISBN);
             command.Parameters.AddWithValue("@Name", bookCategory.Name);
@@ -33,6 +34,7 @@ namespace LMS.Dal
             command.Parameters.AddWithValue("@PublishDate", bookCategory.PublishDate);
             command.Parameters.AddWithValue("@Description", bookCategory.Description);
             var result = command.ExecuteNonQuery();
+            conn.CloseIfOpen();
             return result;
         }
 
@@ -40,12 +42,12 @@ namespace LMS.Dal
         {
             var cmdTxt = @"SELECT * FROM T_BookCategories";
             using var command = new SqlCommand(cmdTxt, conn);
-            conn.Open();
+            conn.OpenIfClosed();
             var reader = command.ExecuteReader();
             var result = new List<BookCategory>();
             while (reader.Read())
             {
-                var item = InitialBookCategory(reader);
+                var item = InitialEntity(reader);
                 result.Add(item);
             }
             return result;
@@ -55,13 +57,13 @@ namespace LMS.Dal
         {
             var cmdTxt = @"SELECT * FROM T_BookCategories WHERE Name = @Name";
             using var command = new SqlCommand(cmdTxt, conn);
-            conn.Open();
+            conn.OpenIfClosed();
             command.Parameters.AddWithValue("@Name", name);
             var reader = command.ExecuteReader();
             var result = new List<BookCategory>();
             while (reader.Read())
             {
-                var item = InitialBookCategory(reader);
+                var item = InitialEntity(reader);
                 result.Add(item);
             }
             return result;
@@ -71,12 +73,12 @@ namespace LMS.Dal
         {
             var cmdTxt = @"SELECT * FROM T_BookCategories WHERE Id = @BookCategoryId";
             using var command = new SqlCommand(cmdTxt, conn);
-            conn.Open();
+            conn.OpenIfClosed();
             command.Parameters.AddWithValue("BookCategoryId", bookCategoryId);
             var reader = command.ExecuteReader();
             while (reader.Read())
             {
-                var item = InitialBookCategory(reader);
+                var item = InitialEntity(reader);
                 return item;
             }
             return null;
@@ -84,9 +86,9 @@ namespace LMS.Dal
 
         public int Delete(Guid bookCategoryId)
         {
-            var cmdTxt = "DELETE FROM BookCategory WHERE CategoryId = @CategoryId";
+            var cmdTxt = "DELETE FROM T_BookCategories WHERE CategoryId = @CategoryId";
             using var command = new SqlCommand(cmdTxt, conn);
-            conn.Open();
+            conn.OpenIfClosed();
             command.Parameters.AddWithValue("@CategoryId", bookCategoryId);
             var result = command.ExecuteNonQuery();
             return result;
@@ -99,7 +101,7 @@ namespace LMS.Dal
                 @"INSERT INTO T_BookCategories (Id,ISBN,Name,Author,Publisher,PublishDate,Description)
                 VALUES (@Id,@ISBN,@Name,@Author,@Publisher,@PublishDate,@Description)";
             using var command = new SqlCommand(cmdTxt, conn);
-            conn.Open();
+            conn.OpenIfClosed();
             command.Parameters.AddWithValue("@Id", bookCategory.Id);
             command.Parameters.AddWithValue("@ISBN", bookCategory.ISBN);
             command.Parameters.AddWithValue("@Name", bookCategory.Name);
@@ -112,7 +114,7 @@ namespace LMS.Dal
 
         }
 
-        private BookCategory InitialBookCategory(SqlDataReader reader)
+        private BookCategory InitialEntity(SqlDataReader reader)
         {
             var id = reader.GetGuid(reader.GetOrdinal("Id"));
             var item = new BookCategory();
